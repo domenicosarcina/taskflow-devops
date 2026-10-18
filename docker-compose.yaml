@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        - VITE_API_URL=http://localhost:8080
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network 
+  backend:
+    build:
+      context: ./backend
+      args:
+        - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/taskflow
+        - SPRING_DATASOURCE_USERNAME=postgres
+        - SPRING_DATASOURCE_PASSWORD=secretpassword ##DA MODIFICARE CON LA PASSWORD DEL DATABASE DESIDERATA
+        - JWT_SECRET=your_jwt_secret ##DA MODIFICARE CON LA CHIAVE SEGRETA DESIDERATA
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=taskflow
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=secretpassword
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+volumes:
+  postgres-data:
+networks:
+  app-network:
+    driver: bridge

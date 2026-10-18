@@ -1,0 +1,49 @@
+backend:
+  replicas: 4
+  image:
+    tag: 1.1.0
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+frontend:
+  replicas: 3
+  image:
+    tag: 1.1.0
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+postgres:
+  replicas: 1
+  storage: 10Gi
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+ingress:
+  enabled: true
+  host: taskflow.com
+  paths:
+    frontend:
+      service: frontend-service
+    backend:
+      service: backend-service
+
+hpa:
+  enabled: true
+  minReplicas: 4
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 75

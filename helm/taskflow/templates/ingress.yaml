@@ -1,0 +1,28 @@
+{{- if .Values.ingress.enabled }}
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: taskflow-ingress
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: {{ .Values.ingress.paths.backend.path }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.ingress.paths.backend.service }}
+                port:
+                  number: {{ .Values.ingress.paths.backend.port }}
+          - path: {{ .Values.ingress.paths.frontend.path }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.ingress.paths.frontend.service }}
+                port:
+                  number: {{ .Values.ingress.paths.frontend.port }}
+
+{{- end }}

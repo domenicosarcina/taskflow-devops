@@ -1,0 +1,113 @@
+.dashboard {
+  animation: fadeIn 0.2s ease;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.column {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.col_opened { border-top: 3px solid var(--opened); }
+.col_inprogress { border-top: 3px solid var(--inprogress); }
+.col_done { border-top: 3px solid var(--done); }
+
+.colHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.colTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.colDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot_opened { background: var(--opened); box-shadow: 0 0 8px var(--opened); }
+.dot_inprogress { background: var(--inprogress); box-shadow: 0 0 8px var(--inprogress); }
+.dot_done { background: var(--done); box-shadow: 0 0 8px var(--done); }
+
+.colLabel {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.2px;
+}
+
+.colCount {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2px 10px;
+  min-width: 28px;
+  text-align: center;
+}
+
+.dropZone {
+  flex: 1;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: background 0.15s ease;
+  min-height: 100px;
+}
+
+.dragOver {
+  background: rgba(124, 106, 255, 0.05);
+}
+
+.col_opened .dragOver { background: rgba(74, 158, 255, 0.06); }
+.col_inprogress .dragOver { background: rgba(255, 159, 67, 0.06); }
+.col_done .dragOver { background: rgba(46, 213, 115, 0.06); }
+
+.draggableItem {
+  user-select: none;
+}
+
+.emptyCol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--text-2);
+  font-size: 13px;
+  opacity: 0.5;
+  margin-top: 4px;
+}
+
+@media (max-width: 900px) {
+  .columns {
+    grid-template-columns: 1fr;
+  }
+  .column {
+    min-height: 200px;
+  }
+}

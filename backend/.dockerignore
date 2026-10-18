@@ -1,0 +1,33 @@
+# Cartelle di build e output
+target/
+build/
+.gradle/
+
+# IDE e file di configurazione locali
+.settings/
+.classpath
+.project
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+
+# File di controllo versione
+.git/
+.gitignore
+
+# Documentazione, note o file di design non necessari al server
+README.md
+docs/
+
+# File di ambiente locali e credenziali (fondamentale per la sicurezza!)
+.env
+*.env
+application-local.yml
+application-dev.yml
+
+# Log e file temporanei del sistema operativo
+*.log
+.DS_Store
+Thumbs.db
