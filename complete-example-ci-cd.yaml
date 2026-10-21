@@ -1,4 +1,4 @@
-name: TaskManager CI/CD
+name: TaskFlow CI/CD
 
 on:
   push:
@@ -15,12 +15,12 @@ permissions:
 
 env:
   AWS_REGION: eu-west-1
-  ECR_BACKEND: taskmanager-backend
-  ECR_FRONTEND: taskmanager-frontend
-  ECS_CLUSTER: taskmanager-cluster
-  ECS_SERVICE: taskmanager-service
+  ECR_BACKEND: taskflow-backend
+  ECR_FRONTEND: taskflow-frontend
+  ECS_CLUSTER: taskflow-cluster
+  ECS_SERVICE: taskflow-service
   ECS_TASK_DEFINITION: infra/ecs/task-definition.json
-  CONTAINER_NAME: taskmanager-backend
+  CONTAINER_NAME: taskflow-backend
 
 jobs:
   backend:
@@ -60,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./frotnend
+        working-directory: ./frontend
 
     steps:
       - name: Checkout repo
