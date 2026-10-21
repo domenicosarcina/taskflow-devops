@@ -2,9 +2,9 @@
 
 TaskFlow is a full-stack task management application built with **Spring Boot, React, and PostgreSQL**, developed as a hands-on project to explore and demonstrate modern **DevOps, containerization, Kubernetes, and CI/CD practices**.
 
-The project covers the journey from local development with Docker Compose to Kubernetes orchestration, Helm-based deployments, and CI/CD automation with GitHub Actions. It also includes a workflow for publishing Docker images to Amazon ECR and deploying the backend to Amazon ECS Fargate.
+The project covers the journey from local development with Docker Compose to Kubernetes orchestration, Helm-based deployments, and CI/CD automation with GitHub Actions. It also includes a GitHub Actions workflow defining Docker image publishing to Amazon ECR and backend deployment to Amazon ECS Fargate. These AWS stages have been configured but not yet validated in a live AWS environment.
 
-> **Project status:** Docker, Kubernetes, Helm, and the GitHub Actions workflow have been developed as learning exercises. The end-to-end AWS deployment workflow has not yet been validated against provisioned AWS infrastructure.
+> **Project status:** Docker, Docker Compose, Kubernetes, Helm, and the GitHub Actions workflow have been implemented as part of this hands-on project. The AWS OIDC, ECR publishing, ECS deployment, and post-deployment health-check stages are configured in the workflow, but have **not yet been executed and validated against a live AWS environment**.
 
 ## 🏗️ Architecture
 
@@ -418,7 +418,7 @@ Helm allows environment-specific configuration without duplicating Kubernetes ma
 
 ## 🔄 CI/CD with GitHub Actions
 
-TaskFlow includes a **multi-job GitHub Actions workflow** for continuous integration, Docker image publishing, and an AWS ECS Fargate deployment process.
+TaskFlow includes a **multi-job GitHub Actions CI/CD workflow** for backend and frontend builds, tests, artifact management, and Docker image creation. The workflow also defines AWS OIDC authentication, Amazon ECR image publishing, and an ECS Fargate deployment stage. **The AWS stages are configured but have not yet been executed and validated against live AWS infrastructure.**
 
 The workflow is defined under `.github/workflows/` and uses five jobs:
 
@@ -483,7 +483,7 @@ needs: [backend, frontend]
 
 ### Docker Buildx and Amazon ECR
 
-After successful CI on `main`, the workflow builds and pushes both Docker images using `docker/build-push-action` and Docker Buildx.
+On pushes to `main`, the configured workflow is designed to build and push both Docker images using `docker/build-push-action` and Docker Buildx, after successful CI. The ECR publishing stage is pending live validation.
 
 Images are tagged with the Git commit SHA:
 
@@ -507,7 +507,7 @@ The Dockerfiles independently build their application artifacts, so the image bu
 
 ### Secure AWS authentication with OIDC
 
-GitHub Actions authenticates to AWS using **OpenID Connect (OIDC)** and an IAM role, rather than long-lived AWS access keys.
+The workflow is configured to authenticate GitHub Actions to AWS using **OpenID Connect (OIDC)** and an IAM role, rather than long-lived AWS access keys. The OIDC integration has not yet been tested against a live AWS account.
 
 ```text
 GitHub Actions
@@ -542,7 +542,9 @@ The role ARN is provided through the GitHub Actions variable `AWS_DEPLOY_ROLE_AR
 
 ### ECS Fargate deployment
 
-The deployment job:
+**Implementation status:** The ECS deployment workflow has been configured but not yet tested against a running AWS environment. The required infrastructure, IAM permissions, and ECS resources must be provisioned and validated before the deployment can be considered operational.
+
+The deployment job is designed to:
 
 1. Receives the backend image URI from the Docker job output.
 2. Assumes the AWS deployment role through OIDC.
@@ -577,7 +579,7 @@ The frontend image is published to ECR, but deploying the frontend is outside th
 
 ### Post-deployment health check
 
-The final job calls the endpoint defined in the GitHub Actions variable `BACKEND_HEALTH_URL`.
+The final job is configured to call the endpoint defined in the GitHub Actions variable `BACKEND_HEALTH_URL` after a successful deployment. This AWS post-deployment check is pending live validation.
 
 ```bash
 curl -fsS \
@@ -723,7 +725,7 @@ TaskFlow was developed to strengthen and demonstrate practical knowledge of:
 
 ## 🚀 Roadmap
 
-### Implemented in the project
+### Completed — implemented or configured in the project
 
 - [x] Docker multi-stage containerization
 - [x] Local development with Docker Compose
@@ -740,11 +742,12 @@ TaskFlow was developed to strengthen and demonstrate practical knowledge of:
 - [x] ECS Fargate deployment workflow
 - [x] Post-deployment health-check workflow
 
-### Planned / to validate
+### Planned — execution and validation
 
-- [ ] Run and validate the full GitHub Actions workflow end to end
+- [ ] Execute and validate the full GitHub Actions workflow end to end
+- [ ] Validate AWS OIDC role assumption and Amazon ECR image publishing
 - [ ] Provision AWS infrastructure with Terraform
-- [ ] Deploy and verify the backend on ECS Fargate
+- [ ] Deploy and verify the backend on ECS Fargate, including the HTTPS health check
 - [ ] Establish a frontend hosting/deployment strategy
 - [ ] Configure CloudWatch monitoring and alerting
 - [ ] Add production environment approvals and rollback mechanisms
